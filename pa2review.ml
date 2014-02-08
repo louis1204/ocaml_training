@@ -25,7 +25,7 @@ let rec wwhile(f, x) = match f(x) with
 |(result, boolean) -> if boolean then wwhile(f, result)
                       else result;;
 
-(* fixpoint *)
+(* fixpoint - if f(x) = x and f(f(x)) = f(x) then f(x) otherwise fixpoint(f, f(x))*)
 let rec fixpoint(f, x) =
 if f(x) = x && f(f(x)) = f(x) then f(x)
 else fixpoint(f, f(x));;
