@@ -20,3 +20,26 @@ Empty -> Node(element, Empty, Empty)
                                Node(curNode, left, (insert element right));;
 (* returning Node in the second case will push down the elements so we will still have
 the tree in the end. *)
+
+(* insert subtree *)
+let rec insertSubtree btreeFrom btreeTo = match (btreeFrom, btreeTo) with
+|(from, Empty) -> from
+|(Node(elementFrom, _, _), Node(elementTo, leftTo, rightTo)) -> 
+ if elementFrom < elementTo then
+  Node(elementTo, insertSubtree btreeFrom leftTo, rightTo)
+ else
+  Node(elementTo, leftTo, insertSubtree btreeFrom rightTo);;
+
+
+(* delete an element from a tree *)
+let delete element tree =
+if not(member tree element) then tree (*element not found*)
+else let rec deleteHelper(element, tree) = match tree with
+|Node(curNode, Empty, Empty) -> Empty
+|Node(curNode, Empty, right) -> if curNode == element then right else Node(curNode, Empty, deleteHelper(element, right))
+|Node(curNode, left, Empty) -> if curNode == element then left else Node(curNode, deleteHelper(element, left), Empty)
+|Node(curNode, left, Node(nodeRight, leftRight, rightRight)) -> 
+ if curNode == element then Node(nodeRight, insertSubtree left leftRight, rightRight) else
+ if element < curNode then Node(curNode, deleteHelper(element, left), Node(nodeRight, leftRight, rightRight)) else
+ Node(curNode, left, deleteHelper(element, Node(nodeRight, leftRight, rightRight))) in
+ deleteHelper(element, tree);;
